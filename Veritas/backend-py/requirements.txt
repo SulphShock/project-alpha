@@ -1,0 +1,12 @@
+# Veritas backend dependencies
+#
+# This backend is stdlib-only: no pip packages are required.
+# The only external dependency is the `tesseract` OCR binary (a system package).
+
+# System dependency (Debian/Ubuntu):
+#   sudo apt install tesseract-ocr
+# macOS:
+#   brew install tesseract
+
+# Optional Python packages (NOT required by the server):
+# Pillow>=10.0.0

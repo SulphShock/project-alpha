@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veritas — Misinformation & Digital Safety Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">Ṽ</span>
+      <div>
+        <div class="brand-name">Veritas</div>
+        <div class="brand-sub">Misinformation & Digital Safety Platform</div>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="analyze">Analyze</button>
+      <button class="tab" data-tab="challenge">Challenge</button>
+      <button class="tab" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="learn">Learn</button>
+    </nav>
+    <div class="topbar-actions">
+      <button id="btnTeacherLogin" class="ghost small">Teacher login</button>
+      <button id="btnTeacherLogout" class="ghost small hidden">Logout</button>
+      <span id="teacherBadge" class="teacher-badge hidden">Teacher mode</span>
+      <button id="btnTheme" class="ghost small" title="Toggle dark mode">🌙</button>
+      <button id="btnSound" class="ghost small">🔊</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ANALYZE TAB -->
+    <section class="view active" id="view-analyze">
+      <div class="analyze-grid">
+        <div class="card input-card">
+          <h3>Input</h3>
+          <div class="input-modes">
+            <button class="mode active" data-mode="text">Text</button>
+            <button class="mode" data-mode="url">URL</button>
+            <button class="mode" data-mode="image">Image</button>
+          </div>
+          <textarea id="inputText" placeholder="Paste a message, article, or social post here..."></textarea>
+          <input id="inputUrl" type="url" placeholder="https://..." class="hidden">
+          <input id="inputImage" type="file" accept="image/*" class="hidden">
+          <div class="btnrow">
+            <button id="analyzeBtn" class="primary">Analyze</button>
+            <button id="sampleBtn" class="ghost">Load sample</button>
+            <button id="clearBtn" class="ghost">Clear</button>
+          </div>
+          <div class="samples" id="samples"></div>
+        </div>
+
+        <div class="card result-card">
+          <h3>Credibility Report</h3>
+          <div id="emptyState" class="empty">Paste content and click Analyze.</div>
+          <div id="result" class="hidden">
+            <div class="score-row">
+              <div class="score-circle" id="scoreCircle">
+                <div class="score-num" id="scoreNum">--</div>
+                <div class="score-label" id="scoreLabel">--</div>
+              </div>
+              <div class="score-meta">
+                <div class="verdict" id="verdict">--</div>
+                <div class="confidence" id="confidence">--</div>
+                <div class="flags" id="flags"></div>
+              </div>
+            </div>
+
+            <div class="section hidden" id="ocrSection">
+              <h4>Extracted text (OCR)</h4>
+              <div id="ocrPreview" class="ocr-preview"></div>
+            </div>
+
+            <div class="section">
+              <h4>Claim-by-claim</h4>
+              <div id="claims" class="claims"></div>
+            </div>
+
+            <div class="section">
+              <h4>Red flags</h4>
+              <div id="redflags" class="redflags"></div>
+            </div>
+
+            <div class="section">
+              <h4>Safe rewrite</h4>
+              <div id="rewrite" class="rewrite"></div>
+            </div>
+
+            <div class="section">
+              <h4>Privacy risk</h4>
+              <div id="privacy" class="privacy"></div>
+            </div>
+
+            <div class="section hidden" id="factCheckSection">
+              <h4>Fact check</h4>
+              <div id="factCheckResults" class="factcheck-results"></div>
+            </div>
+
+            <div class="btnrow">
+              <button id="anchorBtn" class="ghost small">Create Anchor</button>
+              <button id="exportBtn" class="ghost small">Export Report</button>
+              <button id="shareBtn" class="ghost small">Share</button>
+              <button id="factCheckBtn" class="ghost small">Fact-check</button>
+            </div>
+            <div id="anchorOut" class="anchor-out"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHALLENGE TAB -->
+    <section class="view" id="view-challenge">
+      <div class="challenge-grid">
+        <div class="card">
+          <h3>Spot the Fake</h3>
+          <div class="challenge-info">
+            <span>Score: <b id="chScore">0</b></span>
+            <span>Streak: <b id="chStreak">0</b></span>
+            <span>Round: <b id="chRound">1</b>/10</span>
+          </div>
+          <div id="chCard" class="ch-card">
+            <div class="ch-content" id="chContent"></div>
+            <div class="ch-question">Is this real or fake?</div>
+            <div class="ch-btns">
+              <button id="chReal" class="primary green">✓ Real</button>
+              <button id="chFake" class="primary red">✗ Fake</button>
+            </div>
+          </div>
+          <div id="chFeedback" class="ch-feedback"></div>
+          <div class="btnrow">
+            <button id="chStart" class="primary">Start Challenge</button>
+            <button id="chReset" class="ghost">Reset</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Leaderboard</h3>
+          <div id="chLb" class="lb"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD TAB -->
+    <section class="view" id="view-dashboard">
+      <div class="dash-grid">
+        <div class="card stat-card">
+          <h3>Class Overview</h3>
+          <div class="stats-row">
+            <div class="stat"><div class="stat-num" id="dStudents">0</div><div class="stat-label">Students</div></div>
+            <div class="stat"><div class="stat-num" id="dAnalyzed">0</div><div class="stat-label">Analyzed</div></div>
+            <div class="stat"><div class="stat-num" id="dAvg">0</div><div class="stat-label">Avg Score</div></div>
+            <div class="stat"><div class="stat-num" id="dAccuracy">0%</div><div class="stat-label">Accuracy</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Weak Topics</h3>
+          <div id="weakTopics" class="topics"></div>
+        </div>
+        <div class="card">
+          <h3>Recent Activity</h3>
+          <div id="activity" class="activity"></div>
+        </div>
+        <div class="card">
+          <h3>Suggested Lessons</h3>
+          <div id="lessons" class="lessons"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARN TAB -->
+    <section class="view" id="view-learn">
+      <div class="learn-grid">
+        <div class="card">
+          <h3>Digital Safety Toolkit</h3>
+          <div id="toolkit" class="toolkit"></div>
+        </div>
+        <div class="card">
+          <h3>Red Flag Checklist</h3>
+          <div id="checklist" class="checklist"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="teacherModal" class="modal hidden">
+  <div class="modal-card">
+    <h3>Teacher Login</h3>
+    <p>Enter the teacher password to access the Dashboard.</p>
+    <input id="teacherPass" type="password" placeholder="Password">
+    <div class="btnrow">
+      <button id="teacherSubmit" class="primary">Login</button>
+      <button id="teacherCancel" class="ghost">Cancel</button>
+    </div>
+    <div id="teacherErr" class="teacher-err"></div>
+  </div>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
